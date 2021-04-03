@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Меню";
 }
 
@@ -10,7 +9,24 @@
     </div>
     <div class="container mt-4">
         <div class="row ">
-            <div class="col-4">
+            @foreach (Food food in ViewBag.Foods)
+            {
+                <div class="col-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/img/@food.Img" alt="food" />
+                        <div class="card-body">
+                            <div class="card-title myCard">
+                                <h5 class="card-h5">
+                                    @food.Name
+                                </h5>
+                                <p class="card__title-p">$@food.Price</p>
+                            </div>
+                            <p class="card-text">@food.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @*<div class="col-4">
                 <div class="card" style="width: 18rem;">
                     <img src="~/img/food1.jpg" alt="food" />
                     <div class="card-body">
@@ -93,7 +109,7 @@
                         <p class="card-text">Face together given moveth divided form Of Seasons that fruitful.</p>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </section>

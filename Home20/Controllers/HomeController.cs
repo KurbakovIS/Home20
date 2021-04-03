@@ -1,4 +1,5 @@
-﻿using Home20.Models;
+﻿using Home20.Entity;
+using Home20.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,6 +31,7 @@ namespace Home20.Controllers
 
         public IActionResult Menu()
         {
+            ViewBag.Foods = new DataContext().Foods;
             return View();
         }
 

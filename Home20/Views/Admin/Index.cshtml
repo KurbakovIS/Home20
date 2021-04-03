@@ -1,0 +1,94 @@
+﻿@model Home20.Entity.Models.Food
+@{
+    ViewData["Title"] = "Админка";
+}
+
+<section>
+    <h1>Админка</h1>
+    <div class="container">
+        <form id="createFood"
+              enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+              method="post">
+            <div class="form-group">
+                <label for="FileUpload_Name" class="control-label">Название блюда</label>
+                <input id="FileUpload_Name" class="form-control"
+                       name="Name" />
+            </div>
+            <div class="form-group">
+                <label for="FileUpload_Description" class="control-label">Описание</label>
+                <textarea id="FileUpload_Description" asp-for="Description" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="FileUpload_Price" class="control-label">Стоимость</label>
+                <input id="FileUpload_Price" type="number" step="0.1"
+                       name="Price" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="FileUpload_FormFile">Изображение</label>
+                <input id="FileUpload_FormFile" type="file"
+                       name="Img" accept="image/*" onchange="encodeImagetoBase64(this)" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-default" id="btnCreate" type="submit" value="Создать" />
+            </div>
+        </form>
+        <div>
+            <p id="pImageBase64"></p>
+        </div>
+        <div>
+            <img id="image" height="150">
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript" language="javascript">
+        $("#createFood").submit(function () {
+            var jqxhr = $.post("@Url.Action("CreateFood", "Admin")", $('#createFood').serialize())
+                .success(function () {
+                    
+                })
+                .error(function () {
+                    console.log(response.responseText);
+                });
+            return false;
+        });
+        @*$(document).ready(function () {
+             $("#btnCreate").on('click', function (e) {
+                 e.preventDefault();
+
+                 var frmCreate = $("#createFood").serialize();
+
+                 console.log(frmCreate)
+                 $.ajax({
+                    url: "@Url.Action("CreateFood", "Admin")",
+                    type: 'POST',
+                    traditional: true,
+                     data: frmCreate,
+                    processData: false,
+                    dataType: 'json',
+                    ContentType: 'application/json',
+                    cache: false,
+                    success: function (response) {
+
+                    },
+                    error: function (response) {
+                        console.log(response.responseText);
+                    }
+                });
+             });
+        });*@
+        function encodeImagetoBase64(element) {
+            var file = element.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                $("#image").attr("src", reader.result);
+                $("#pImageBase64").html(reader.result);
+
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+}
