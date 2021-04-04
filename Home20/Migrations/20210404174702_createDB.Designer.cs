@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Home20.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210403145835_createTableFood")]
-    partial class createTableFood
+    [Migration("20210404174702_createDB")]
+    partial class createDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

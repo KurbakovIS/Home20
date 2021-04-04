@@ -2,7 +2,7 @@
 
 namespace Home20.Migrations
 {
-    public partial class createTableFood : Migration
+    public partial class createDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
