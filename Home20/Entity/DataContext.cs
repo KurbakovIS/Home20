@@ -1,10 +1,5 @@
 ﻿using Home20.Entity.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Home20.Entity
 {
@@ -17,8 +12,6 @@ namespace Home20.Entity
             optionsBuilder.UseSqlServer(
                 @"Server=(localdb)\MSSQLLocalDB;DataBase=_EntityCoreHome;Trusted_Connection=True;"
             );
-
         }
-
     }
 }
