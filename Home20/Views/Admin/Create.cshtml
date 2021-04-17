@@ -1,0 +1,70 @@
+﻿@model Home20.Entity.Models.Food
+@{
+    ViewData["Title"] = "Создать";
+}
+
+<section>
+    <div class="container">
+        <form asp-action="CreateFood" asp-controller="Admin" method="post" id="create" style="max-width:500px">
+            <fieldset>
+                <legend>Добавить позицию в меню</legend>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input type="number" step="0.1" min="0" asp-for="Price" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea type="text" asp-for="Description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Img" class="control-label"></label>
+                    <input id="FileAdd" asp-for="Img" type="file" class="form-control " />
+                </div>
+                <input class="btn btn-outline-success" type="submit" value="Создать" />
+            </fieldset>
+        </form>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+            $("#create").submit(function (e) {
+                e.preventDefault();
+
+                let formAction = $(this).attr("action");
+                let fdata = new FormData();
+                let description = $("textarea")[0]
+                let fileInput = $('#FileAdd')[0];
+                let file = fileInput.files[0];
+
+
+                $("input").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                });
+                fdata.append("Img", file);
+                fdata.append("Description", $(description).val());
+
+
+                $.ajax({
+                    type: 'post',
+                    url: formAction ,
+                    data: fdata,
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    document.location.href = 'https://localhost:5001/Admin';
+                });
+
+            });
+
+         });
+
+    </script>
+}
