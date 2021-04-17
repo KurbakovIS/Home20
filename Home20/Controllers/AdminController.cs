@@ -2,6 +2,7 @@
 using Home20.Entity.Models;
 using Home20.Entity.ReqModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
@@ -28,9 +29,69 @@ namespace Home20.Controllers
         {
             return View();
         }
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(int? Id)
         {
-            return View();
+            if (Id == 0)
+                return BadRequest();
+
+            try
+            {
+                using var db = new DataContext();
+                var findFood = await db.Foods.FindAsync(Id);
+                if (findFood != null)
+                    return View(findFood);
+                else
+                    return NotFound();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFood(UpdateFood food)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var style = NumberStyles.Number | NumberStyles.AllowCurrencySymbol;
+                var provider = new CultureInfo("ru-RU");
+
+                
+
+                try
+                {
+                    var uniqueNameFile = "";
+                    var number = Decimal.Parse(food.Price.Replace('.', ','), style, provider);
+
+                    using var db = new DataContext();
+                    var findFood = await db.Foods.FindAsync(food.Id);
+
+                    findFood.Name = food.Name;
+                    findFood.Description = food.Description;
+                    findFood.Price = number;
+
+                    if (food.Img != null)
+                    {
+                        uniqueNameFile = await RecordImg(food.Img);
+                        findFood.Img = $"img/uploads/{uniqueNameFile}";
+                    }
+                       
+                    
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return BadRequest(e.Message);
+                }
+                return Ok();
+            }
+            else
+                return BadRequest("Модель не валидна");
         }
 
         [HttpDelete]
@@ -63,7 +124,6 @@ namespace Home20.Controllers
           return  NoContent();
         }
 
-
         /// <summary>
         /// Добавление позиции в меню
         /// </summary>
@@ -80,18 +140,7 @@ namespace Home20.Controllers
                 var provider = new CultureInfo("ru-RU");
 
                 if (food.Img != null)
-                {
-                    var uploads = Path.Combine(hostingEnvironment.WebRootPath, "img\\uploads");
-
-                    if (!Directory.Exists(uploads))
-                        Directory.CreateDirectory(uploads);
-
-                    uniqueNameFile = GetUniqueFileName(food.Img.FileName);
-                    var filePath = Path.Combine(uploads, uniqueNameFile);
-                    FileStream neImg = new FileStream(filePath, FileMode.Create);
-                    await food.Img.CopyToAsync(neImg);
-                    neImg.Close();
-                }
+                    uniqueNameFile = await RecordImg(food.Img);
 
                 try
                 {
@@ -119,6 +168,28 @@ namespace Home20.Controllers
             else
                 return BadRequest("Модель не валидна");
         }
+
+        /// <summary>
+        /// Копирует в папку изображение пришедшее с клиента
+        /// </summary>
+        /// <param name="Img">изображение с клиента</param>
+        /// <returns>уникальное название изображения</returns>
+        async Task<string> RecordImg(IFormFile Img)
+        {
+            var uploads = Path.Combine(hostingEnvironment.WebRootPath, "img\\uploads");
+
+            if (!Directory.Exists(uploads))
+                Directory.CreateDirectory(uploads);
+
+            string uniqueNameFile = GetUniqueFileName(Img.FileName);
+            var filePath = Path.Combine(uploads, uniqueNameFile);
+            FileStream neImg = new FileStream(filePath, FileMode.Create);
+            await Img.CopyToAsync(neImg);
+            neImg.Close();
+
+            return uniqueNameFile;
+        }
+
         /// <summary>
         /// Присваивает уникальное имя файлу
         /// </summary>
@@ -143,8 +214,16 @@ namespace Home20.Controllers
             await  img.DeleteAsync();
         }
     }
+    /// <summary>
+    /// Расширение FileExtensions для ассинхронного удаления
+    /// </summary>
     public static class FileExtensions
     {
+        /// <summary>
+        /// ассинхронное удаление файла
+        /// </summary>
+        /// <param name="fi">удаляемый файл</param>
+        /// <returns></returns>
         public static Task DeleteAsync(this FileInfo fi)
         {
             return Task.Factory.StartNew(() => fi.Delete());

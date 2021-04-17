@@ -2,3 +2,74 @@
 @{
     ViewData["Title"] = "Изменить";
 }
+
+<section>
+    <div class="container">
+        <form asp-action="EditFood" asp-controller="Admin" method="post" id="edit" style="max-width:500px">
+            <fieldset>
+                <legend>Редактировать @Model.Name</legend>
+                <div class="form-group">
+                    <label asp-for="Id" class="control-label">ID</label>
+                    <input type="text" asp-for="Id" class="form-control" readonly/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Название</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Стоимость</label>
+                    <input type="text" asp-for="Price" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Описание</label>
+                    <textarea type="text" asp-for="Description" class="form-control"></textarea>
+                </div>
+                <img src="~/@Model.Img" alt="Alternate Text" style="max-width:200px;" />
+                <div class="form-group">
+                    <label asp-for="Img" class="control-label">Изменить изображение</label>
+                    <input id="FileAdd" asp-for="Img" type="file" class="form-control " />
+                </div>
+                <input class="btn btn-outline-success" type="submit" value="Создать" />
+            </fieldset>
+        </form>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+            $("#edit").submit(function (e) {
+                e.preventDefault();
+
+                let formAction = $(this).attr("action");
+                let fdata = new FormData();
+                let description = $("textarea")[0]
+                let fileInput = $('#FileAdd')[0];
+                let file = fileInput.files[0];
+
+
+                $("input").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                });
+                fdata.append("Img", file);
+                fdata.append("Description", $(description).val());
+
+
+                $.ajax({
+                    type: 'post',
+                    url: formAction ,
+                    data: fdata,
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    document.location.href = 'https://localhost:5001/Admin';
+                });
+
+            });
+
+         });
+
+    </script>
+}

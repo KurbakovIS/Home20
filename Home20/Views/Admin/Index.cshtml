@@ -35,8 +35,9 @@
                             <img src="~/@food.Img" alt="food" style="max-width:100px;" />
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-warning mr-3">
-                                <a class=" text-dark" asp-area="" asp-controller="Admin" asp-action="Edit">Изменить</a>
+                            <button type="button" class="btn btn-outline-warning mr-3" id="Edit" data-id="@food.Id">
+                                @*Изменить*@
+                                <a class=" text-dark" asp-controller="Admin" asp-action="Edit" asp-route-id="@food.Id">Изменить</a>
                             </button>
                             <button type="button" class="btn btn-outline-danger" id="Delete" data-id="@food.Id">Удалить</button>
                         </td>
@@ -57,12 +58,15 @@
         $(document).ready(function () {
 
             let buttonDelete = $('#Delete');
-            let id = buttonDelete.attr('data-id')
+            let buttonEdit = $('#Edit');
+
+            let idDelete = buttonDelete.attr('data-id')
+            let idEdit = buttonEdit.attr('data-id')
+
             let fdata = new FormData();
-            fdata.append("Id", id);
 
             buttonDelete.click(() => {
-                console.log(id)
+                fdata.append("Id", idDelete);
                 $.ajax({
                     type: 'delete',
                     url: '@Url.Action("DeleteFood", "Admin")',
@@ -71,9 +75,26 @@
                     contentType: false
                 }).done(function (result) {
                     location.reload();
+                    fdata = new FormData();
                     console.log(result);
                 });
             })
+
+             @*buttonDelete.click(() => {
+                 fdata.append("Id", idEdit);
+                console.log(idEdit)
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.Action("Edit", "Admin")',
+                    data: fdata,
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    location.reload();
+                    fdata = new FormData();
+                    console.log(result);
+                });
+            })*@
          });
 
     </script>
