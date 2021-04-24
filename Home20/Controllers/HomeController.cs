@@ -1,4 +1,5 @@
 ﻿using Home20.Entity;
+using Home20.Entity.Data;
 using Home20.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,11 @@ namespace Home20.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IFoodData foodData;
+        public HomeController(ILogger<HomeController> logger, IFoodData FoodData)
         {
             _logger = logger;
+            foodData = FoodData;
         }
 
         public IActionResult Index()
@@ -29,10 +31,10 @@ namespace Home20.Controllers
             return View();
         }
 
-        public IActionResult Menu()
+        public async Task<IActionResult> Menu()
         {
-            ViewBag.Foods = new DataContext().Foods;
-            return View();
+            var foods =await foodData.GetFoods();
+            return View(foods);
         }
 
         public IActionResult Contact()

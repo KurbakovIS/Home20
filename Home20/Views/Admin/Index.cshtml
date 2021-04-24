@@ -1,5 +1,4 @@
-﻿@model Home20.Entity.Models.Food
-@{
+﻿@{
     ViewData["Title"] = "Админка";
 }
 
@@ -18,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (Food food in ViewBag.Foods)
+                @foreach (Food food in Model)
                 {
                     <tr>
                         <th scope="row">@food.Id</th>
@@ -35,19 +34,14 @@
                             <img src="~/@food.Img" alt="food" style="max-width:100px;" />
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-warning mr-3" id="Edit" data-id="@food.Id">
-                                @*Изменить*@
-                                <a class=" text-dark" asp-controller="Admin" asp-action="Edit" asp-route-id="@food.Id">Изменить</a>
-                            </button>
+                            <a class=" text-dark" asp-controller="Admin" asp-action="Edit" asp-route-id="@food.Id">Изменить</a>
                             <button type="button" class="btn btn-outline-danger" id="Delete" data-id="@food.Id">Удалить</button>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        <button type="button" class="btn btn-outline-success">
-            <a class=" text-dark" asp-area="" asp-controller="Admin" asp-action="Create">Добавить позоцию</a>
-        </button>
+            <a class="btn btn-outline-success text-dark" asp-area="" asp-controller="Admin" asp-action="Create">Добавить позоцию</a>
 
     </div>
 </section>
@@ -79,22 +73,6 @@
                     console.log(result);
                 });
             })
-
-             @*buttonDelete.click(() => {
-                 fdata.append("Id", idEdit);
-                console.log(idEdit)
-                $.ajax({
-                    type: 'get',
-                    url: '@Url.Action("Edit", "Admin")',
-                    data: fdata,
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-                    location.reload();
-                    fdata = new FormData();
-                    console.log(result);
-                });
-            })*@
          });
 
     </script>

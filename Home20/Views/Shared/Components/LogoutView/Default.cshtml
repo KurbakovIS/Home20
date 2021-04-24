@@ -1,0 +1,52 @@
+﻿@{
+    if (Context.Request.Cookies.ContainsKey("token"))
+    {
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FoodFun</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Menu">Меню</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Контакты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Админка</a>
+                    </li>
+                    <li>
+                        <form method="post" asp-controller="Auth" asp-action="Logout" id="logoutform" asp-antiforgery="true">
+                            <a class="navbar-brand" href="#" onclick="document.getElementById('logoutform').submit()">Выход</a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        @*<div class="btn-group pull-right" style="width: 650px;">
+                <a class="navbar-brand" href="~/">В начало</a>
+                <a class="navbar-brand" href="/Home/Add">Добавить автомобиль</a>
+                <a class="navbar-brand" herf="#">@User.Identity.Name в системе</a>
+
+            </div>*@
+    }
+    else
+    {
+        <div class="container">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Вход</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Registration">Регистрация</a>
+                </li>
+            </ul>
+        </div>
+    }
+}
