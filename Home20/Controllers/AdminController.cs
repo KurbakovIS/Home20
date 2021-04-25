@@ -70,7 +70,7 @@ namespace Home20.Controllers
                     Console.WriteLine(e);
                     return BadRequest(e.Message);
                 }
-                return Ok();
+                return RedirectToAction("Index","Admin");
             }
             else
                 return BadRequest("Модель не валидна");

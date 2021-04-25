@@ -24,7 +24,7 @@ namespace Home20.Entity.Data
         /// <returns>позиции в меню </returns>
         public async Task<IEnumerable<Food>> GetFoods()
         {
-            string url = @"https://localhost:5001/api/Foods";
+            string url = $"https://localhost:5001/api/Foods";
 
             string json =await httpClient.GetStringAsync(url);
             var res = JsonConvert.DeserializeObject<IEnumerable<Food>>(json);
@@ -39,7 +39,7 @@ namespace Home20.Entity.Data
         /// <returns></returns>
         public async Task AddFood(CreateFood food)
         {
-            string url = @"https://localhost:5001/api/Foods";
+            string url = $"https://localhost:5001/api/Foods";
 
             var res = await httpClient.PostAsync(url,
                 content: new StringContent(JsonConvert.SerializeObject(food),
@@ -69,7 +69,7 @@ namespace Home20.Entity.Data
         /// <returns></returns>
         public async Task<Food> GetFood(int Id)
         {
-            string url = @"https://localhost:5001/api/Foods/{Id}";
+            string url = $"https://localhost:5001/api/Foods/{Id}";
 
             string json = await httpClient.GetStringAsync(url);
 
@@ -78,12 +78,12 @@ namespace Home20.Entity.Data
 
         public async Task UpdateFood(int id, UpdateFood food)
         {
-            string url = @"https://localhost:5001/api/Foods/{id}";
-
-            var res = await httpClient.PutAsync(url,
-                content: new StringContent(JsonConvert.SerializeObject(food),
+            string url = $"https://localhost:5001/api/Foods/{id}";
+            var content = new StringContent(JsonConvert.SerializeObject(food),
                 Encoding.UTF8,
-                mediaType: "application/json"));
+                mediaType: "application/json");
+
+            var res = await httpClient.PutAsync(url,content);
             Console.WriteLine(res);
         }
     }
