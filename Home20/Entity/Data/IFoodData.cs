@@ -10,9 +10,7 @@ namespace Home20.Entity.Data
     public interface IFoodData
     {
         Task<IEnumerable<Food>> GetFoods();
-        Task AddFood(CreateFood food);
         Task DeleteFood(int Id);
         Task<Food> GetFood(int Id);
-        Task UpdateFood(int id, UpdateFood food);
     }
 }

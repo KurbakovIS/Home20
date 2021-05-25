@@ -10,11 +10,11 @@
                 <legend>Добавить позицию в меню</legend>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Название</label>
-                    <input type="text" asp-for="Name" class="form-control" />
+                    <input type="text" asp-for="Name" id="Name" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Price" class="control-label">Стоимость</label>
-                    <input type="number" step="0.1" min="0" asp-for="Price" class="form-control" />
+                    <input type="number" step="0.1" min="0" asp-for="Price" id="Price" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label">Описание</label>
@@ -24,7 +24,7 @@
                     <label asp-for="Img" class="control-label">Выберите изображение</label>
                     <input id="FileAdd" asp-for="Img" type="file" class="form-control " />
                 </div>
-                <input class="btn btn-outline-success" type="submit" value="Создать" />
+                <button class="btn btn-outline-success" type="submit" >Создать</button>
             </fieldset>
         </form>
     </div>
@@ -32,36 +32,33 @@
 
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" 
+            crossorigin="anonymous" 
+            referrerpolicy="no-referrer"></script>
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
 
             $("#create").submit(function (e) {
                 e.preventDefault();
 
-                let formAction = $(this).attr("action");
                 let fdata = new FormData();
                 let description = $("textarea")[0]
                 let fileInput = $('#FileAdd')[0];
                 let file = fileInput.files[0];
 
-
-                $("input").each(function (x, y) {
-                    fdata.append($(y).attr("name"), $(y).val());
-                });
+                fdata.append("Price", $("#Price").val());
+                fdata.append("Name", $("#Name").val());
                 fdata.append("Img", file);
                 fdata.append("Description", $(description).val());
-
-
-                $.ajax({
-                    type: 'post',
-                    url: formAction ,
-                    data: fdata,
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-                    document.location.href = 'https://localhost:5001/Admin';
-                });
-
+                axios.post('http://localhost:5000/api/Foods', fdata,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(document.location.href = 'http://localhost:5003/Admin')
+                    .catch((error) => { console.error(error) });
             });
 
          });

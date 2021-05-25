@@ -54,28 +54,6 @@ namespace Home20.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditFood(UpdateFood food)
-        {
-
-            if (ModelState.IsValid)
-            {
-
-                try
-                {
-                 await foodData.UpdateFood(food.Id, food);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    return BadRequest(e.Message);
-                }
-                return RedirectToAction("Index","Admin");
-            }
-            else
-                return BadRequest("Модель не валидна");
-        }
-
         [HttpDelete]
         public async Task<IActionResult> DeleteFood(int Id)
         {
@@ -95,32 +73,6 @@ namespace Home20.Controllers
           return  NoContent();
         }
 
-        /// <summary>
-        /// Добавление позиции в меню
-        /// </summary>
-        /// <param name="food"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> CreateFood(CreateFood food)
-        {
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                   await foodData.AddFood(food);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    return BadRequest(e.Message);
-                }
-                return Ok();
-            }
-            else
-                return BadRequest("Модель не валидна");
-        }
-       
     }
     
 }

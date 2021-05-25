@@ -41,7 +41,7 @@ namespace Home20.Controllers
         [HttpPost]
         public async Task<IActionResult> Registration(UserReg userReg)
         {
-            string url = @"https://localhost:5001/api/Auth";
+            string url = @"http://localhost:5000/api/Auth";
 
             var req =await httpClient.PostAsync(requestUri: url,
                 content: new StringContent(JsonConvert.SerializeObject(userReg),
@@ -60,7 +60,7 @@ namespace Home20.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserAuth userAuth)
         {
-            string url = @"https://localhost:5001/api/Auth/login";
+            string url = @"http://localhost:5000/api/Auth/login";
 
             var req = await httpClient.PostAsync(requestUri: url,
                 content: new StringContent(JsonConvert.SerializeObject(userAuth),

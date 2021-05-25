@@ -10,7 +10,7 @@
                 <legend>Редактировать @Model.Name</legend>
                 <div class="form-group">
                     <label asp-for="Id" class="control-label">ID</label>
-                    <input type="text" asp-for="Id" class="form-control" readonly/>
+                    <input type="text" asp-for="Id" id="Id" class="form-control" readonly/>
                 </div>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Название</label>
@@ -24,7 +24,7 @@
                     <label asp-for="Description" class="control-label">Описание</label>
                     <textarea type="text" asp-for="Description" class="form-control"></textarea>
                 </div>
-                <img src="~/@Model.Img" alt="Alternate Text" style="max-width:200px;" />
+                <img src="@Model.Img" alt="Alternate Text" style="max-width:200px;" />
                 <div class="form-group">
                     <label asp-for="Img" class="control-label">Изменить изображение</label>
                     <input id="FileAdd" asp-for="Img" type="file" class="form-control " />
@@ -37,34 +37,35 @@
 
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
 
             $("#edit").submit(function (e) {
                 e.preventDefault();
 
-                let formAction = $(this).attr("action");
                 let fdata = new FormData();
                 let description = $("textarea")[0]
                 let fileInput = $('#FileAdd')[0];
                 let file = fileInput.files[0];
 
-
-                $("input").each(function (x, y) {
-                    fdata.append($(y).attr("name"), $(y).val());
-                });
+                fdata.append("Price", $("#Price").val());
+                fdata.append("Name", $("#Name").val());
+                fdata.append("Id", $("#Id").val());
                 fdata.append("Img", file);
                 fdata.append("Description", $(description).val());
 
-
-                $.ajax({
-                    type: 'post',
-                    url: formAction ,
-                    data: fdata,
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-                });
+                axios.put(`http://localhost:5000/api/Foods`, fdata,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(document.location.href = 'http://localhost:5003/Admin')
+                    .catch((error) => { console.error(error) });
 
             });
 
