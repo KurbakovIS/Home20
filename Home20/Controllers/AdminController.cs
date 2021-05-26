@@ -54,24 +54,6 @@ namespace Home20.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteFood(int Id)
-        {
-            if(Id == 0)
-                return BadRequest();
-
-            try
-            {
-                await foodData.DeleteFood(Id);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return BadRequest();
-            }
-
-          return  NoContent();
-        }
 
     }
     

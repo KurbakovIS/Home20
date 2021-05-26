@@ -34,8 +34,8 @@
                             <img src="@food.Img" alt="food" style="max-width:100px;" />
                         </td>
                         <td>
-                            <a class=" text-dark" asp-controller="Admin" asp-action="Edit" asp-route-id="@food.Id">Изменить</a>
-                            <button type="button" class="btn btn-outline-danger" id="Delete" data-id="@food.Id">Удалить</button>
+                            <a class=" text-dark btn btn-outline-warning" asp-controller="Admin" asp-action="Edit" asp-route-id="@food.Id">Изменить</a>
+                            <button type="button" class="btn btn-outline-danger" id="delete" data-id="@food.Id">Удалить</button>
                         </td>
                     </tr>
                 }
@@ -48,31 +48,24 @@
 
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
 
-            let buttonDelete = $('#Delete');
-            let buttonEdit = $('#Edit');
-
-            let idDelete = buttonDelete.attr('data-id')
-            let idEdit = buttonEdit.attr('data-id')
-
-            let fdata = new FormData();
-
-            buttonDelete.click(() => {
-                fdata.append("Id", idDelete);
-                $.ajax({
-                    type: 'delete',
-                    url: '@Url.Action("DeleteFood", "Admin")',
-                    data: fdata,
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-                    location.reload();
-                    fdata = new FormData();
-                    console.log(result);
-                });
-            })
+            $('button').click(async (e) => {
+                let idDelete = $(e.target).data('id')
+                try {
+                    await axios.delete(`http://localhost:5000/api/Foods/${idDelete}`)
+                    location.reload()
+                } catch (e) {
+                    console.error(e)
+                }
+                
+            });
+          
          });
 
     </script>

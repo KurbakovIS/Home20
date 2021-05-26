@@ -39,7 +39,7 @@
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
 
-            $("#create").submit(function (e) {
+            $("#create").submit(async e =>{
                 e.preventDefault();
 
                 let fdata = new FormData();
@@ -51,14 +51,18 @@
                 fdata.append("Name", $("#Name").val());
                 fdata.append("Img", file);
                 fdata.append("Description", $(description).val());
-                axios.post('http://localhost:5000/api/Foods', fdata,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    })
-                    .then(document.location.href = 'http://localhost:5003/Admin')
-                    .catch((error) => { console.error(error) });
+                try {
+                    await axios.post('http://localhost:5000/api/Foods', fdata,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                    document.location.href = 'http://localhost:5003/Admin'
+                } catch (e) {
+                    console.error(e)
+                }
+             
             });
 
          });
